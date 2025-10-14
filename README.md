@@ -38,7 +38,7 @@ nekobo/
 
 ### 1. Clone repo
 ```bash
-git clone https://github.com/YOUR_USERNAME/nekobo.git
+git clone https://github.com/hiepqvbn/nekobo.git
 cd nekobo
 ```
 
