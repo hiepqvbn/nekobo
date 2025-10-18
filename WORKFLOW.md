@@ -16,12 +16,10 @@ The goal is to stay simple for solo work while remaining clean, consistent, and 
 
 **Example:**
 
-    ```
     main
     ├── v0.1-notes
     ├── v0.1-dev
     └── v0.1-test
-    ```
 
 ---
 
