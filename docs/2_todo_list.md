@@ -1,8 +1,8 @@
 # Nekobo v0.1 — ToDo List
 
 ## Phase 1 — Device Check
-- [ ] Test Raspberry Pi 4 power and OS
-- [ ] Test Arduino Uno with Blink sketch
+- [x] Test Raspberry Pi 4 power and OS
+- [x] Test Arduino Uno with Blink sketch
 - [ ] Test motor driver outputs
 - [ ] Test motors spin freely
 - [ ] Test controller input (Xbox / Hori Stick)
@@ -14,7 +14,7 @@
 - [ ] Verify power and direction
 - [ ] Log max speed and battery consumption
 
-## Phase 3 — Base Mecha
+## Phase 3 — Base Mechanical
 - [ ] Build temporary 2-wheel + caster chassis
 - [ ] Mount motors and driver
 - [ ] Test rolling stability
