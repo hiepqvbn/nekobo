@@ -76,7 +76,6 @@ try:
     while True:
         pygame.event.pump()
         hat = joystick.get_hat(0)  # Hat0X
-        y = joystick.get_axis(7)  # Hat0Y
 
         x = hat[0]
         y = hat[1]
