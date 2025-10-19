@@ -17,9 +17,12 @@ def find_arduino():
 # Use it
 try:
     SERIAL_PORT = find_arduino()
-    BAUD_RATE = 115200
+    BAUD_RATE = 57600 #115200
     ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
     print(f"Connected to Arduino at {SERIAL_PORT}")
+    feedback = ser.readline().decode().strip()
+    if feedback:
+        print("Arduino:", feedback)
 except Exception as e:
     print(e)
 
@@ -35,10 +38,10 @@ print(f"Detected {joystick.get_numhats()} hats.")
 direction_map = {
     "forward": "dir 0 -1",
     "backward": "dir 0 1",
-    "left": "dir -1 0",
-    "right": "dir 1 0",
-    "forward-left": "dir -1 -1",
-    "forward-right": "dir 1 -1",
+    "left": "dir 1 0",
+    "right": "dir -1 0",
+    "forward-left": "dir 1 -1",
+    "forward-right": "dir -1 -1",
     "backward-left": "dir -1 1",
     "backward-right": "dir 1 1",
     "stop": "dir 0 0"
@@ -69,10 +72,8 @@ def set_direction(x, y):
 def send_command(cmd):
     cmd = f"{cmd}\n"
     ser.write(cmd.encode('utf-8'))
-    print(f"Sent: {cmd.strip()}")
-    feedback = ser.readline().decode().strip()
-    if feedback:
-        print("Arduino:", feedback)
+    # print(f"Sent: {cmd.strip()}")
+    
 
 
 try:
@@ -88,7 +89,7 @@ try:
         command = direction_map[direction]
         send_command(command)
 
-        time.sleep(0.1)
+        time.sleep(0.05)
 
 except KeyboardInterrupt:
     print("\nExiting...")
