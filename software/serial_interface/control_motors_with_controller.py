@@ -30,11 +30,44 @@ joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
 print("Controller:", joystick.get_name())
-print(f"Detected {joystick.get_numaxes()} axes")
+print(f"Detected {joystick.get_numhats()} hats.")
+
+direction_map = {
+    "forward": "dir 0 -1",
+    "backward": "dir 0 1",
+    "left": "dir -1 0",
+    "right": "dir 1 0",
+    "forward-left": "dir -1 -1",
+    "forward-right": "dir 1 -1",
+    "backward-left": "dir -1 1",
+    "backward-right": "dir 1 1",
+    "stop": "dir 0 0"
+}
 
 
-def send_command(left, right):
-    cmd = f"{left},{right}\n"
+def set_direction(x, y):
+    if y == 1 and x == 0:
+        return "forward"
+    elif y == -1 and x == 0:
+        return "backward"
+    elif y == 0 and x == -1:
+        return "left"
+    elif y == 0 and x == 1:
+        return "right"
+    elif y == 1 and x == -1:
+        return "forward-left"
+    elif y == 1 and x == 1:
+        return "forward-right"
+    elif y == 1 and x == -1:
+        return "backward-left"
+    elif y == -1 and x == 1:
+        return "backward-right"
+    else:
+        return "stop"
+
+
+def send_command(cmd):
+    cmd = f"{cmd}\n"
     ser.write(cmd.encode('utf-8'))
     print(f"Sent: {cmd.strip()}")
 
@@ -42,32 +75,16 @@ def send_command(left, right):
 try:
     while True:
         pygame.event.pump()
-        x = joystick.get_axis(6)  # Hat0X
+        hat = joystick.get_hat(0)  # Hat0X
         y = joystick.get_axis(7)  # Hat0Y
 
-        # Convert from [-32767, 0, 32767] to -1, 0, 1
-        x = int(x / 32767) if x != 0 else 0
-        y = int(y / 32767) if y != 0 else 0
+        x = hat[0]
+        y = hat[1]
 
         # Movement logic
-        if y == -1 and x == 0:
-            send_command(100, 100)  # Forward
-        elif y == 1 and x == 0:
-            send_command(-100, -100)  # Backward
-        elif y == 0 and x == -1:
-            send_command(-100, 100)  # Turn left
-        elif y == 0 and x == 1:
-            send_command(100, -100)  # Turn right
-        elif y == -1 and x == -1:
-            send_command(50, 100)  # Forward-left
-        elif y == -1 and x == 1:
-            send_command(100, 50)  # Forward-right
-        elif y == 1 and x == -1:
-            send_command(-50, -100)  # Backward-left
-        elif y == 1 and x == 1:
-            send_command(-100, -50)  # Backward-right
-        else:
-            send_command(0, 0)  # Stop
+        direction = set_direction(x, y)
+        command = direction_map[direction]
+        send_command(command)
 
         time.sleep(0.1)
 
