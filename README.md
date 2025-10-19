@@ -6,6 +6,7 @@ The goal is to make a platform that is **easy to build, easy to program, and fun
 ---
 
 ## ✨ Features (v0.1)
+
 - Hardware:
   - First FreeCAD model (`.fcstd`) + STL export for 3D printing
   - Early draft of KiCad schematic
@@ -19,6 +20,7 @@ The goal is to make a platform that is **easy to build, easy to program, and fun
 ---
 
 ## 📂 Repository Structure
+
 ```
 nekobo/
 ├── hardware/ # CAD + PCB
@@ -37,17 +39,20 @@ nekobo/
 ## 🚀 Getting Started
 
 ### 1. Clone repo
+
 ```bash
 git clone https://github.com/hiepqvbn/nekobo.git
 cd nekobo
 ```
 
 ### 2. Build container
+
 ```bash
 docker build -t nekobo-dev ./container
 ```
 
 ### 3. Run hello-world ROS2 node
+
 ```bash
 docker run -it --rm nekobo-dev
 source /ros2_ws/install/setup.bash
@@ -55,9 +60,16 @@ ros2 run nekobo_pkg hello_node
 ```
 
 You should see:
+
 ```bash
 [INFO] [hello_node]: Hello Nekobo!
 ```
+
+---
+
+## Layout
+
+![v0.1 Layout](./docs/layouts/nekobo-v0.1-system-layout.drawio.svg)
 
 ---
 
@@ -114,7 +126,7 @@ Software (ROS2, Python) → Apache 2.0
 Discussions: GitHub Discussions (planned)
 
 Issues: Use GitHub Issues
- for bugs and feature requests
+for bugs and feature requests
 
 ---
 
