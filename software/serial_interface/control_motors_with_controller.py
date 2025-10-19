@@ -1,12 +1,27 @@
 import pygame
 import serial
 import time
+import serial.tools.list_ports
 
-SERIAL_PORT = '/dev/ttyACM0'
-BAUD_RATE = 115200
 
-ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-time.sleep(2)
+def find_arduino():
+    ports = list(serial.tools.list_ports.comports())
+    for p in ports:
+        # Look for Arduino-like devices
+        if "Arduino" in p.description or "ttyACM" in p.device or "ttyUSB" in p.device:
+            print(f"Found Arduino on port: {p.device}")
+            return p.device
+    raise Exception("Arduino not found. Check USB connection.")
+
+
+# Use it
+try:
+    SERIAL_PORT = find_arduino()
+    BAUD_RATE = 115200
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+    print(f"Connected to Arduino at {SERIAL_PORT}")
+except Exception as e:
+    print(e)
 
 pygame.init()
 pygame.joystick.init()
@@ -17,10 +32,12 @@ joystick.init()
 print("Controller:", joystick.get_name())
 print(f"Detected {joystick.get_numaxes()} axes")
 
+
 def send_command(left, right):
     cmd = f"{left},{right}\n"
     ser.write(cmd.encode('utf-8'))
     print(f"Sent: {cmd.strip()}")
+
 
 try:
     while True:
