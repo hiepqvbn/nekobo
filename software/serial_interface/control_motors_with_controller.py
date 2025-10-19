@@ -70,6 +70,9 @@ def send_command(cmd):
     cmd = f"{cmd}\n"
     ser.write(cmd.encode('utf-8'))
     print(f"Sent: {cmd.strip()}")
+    feedback = ser.readline().decode().strip()
+    if feedback:
+        print("Arduino:", feedback)
 
 
 try:
