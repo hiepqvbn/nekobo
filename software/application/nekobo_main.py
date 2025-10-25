@@ -38,6 +38,7 @@ def main():
         pass
 
     bridge = Bridge(controller=controller, comm=comm)
+    bridge.request_heartbeat()
 
     try:
         while True:
