@@ -54,7 +54,7 @@ deactivate
 3) Copy the systemd template and edit paths if needed (the template is now in `software/tools/startup/`):
 
 ```bash
-sudo cp software/tools/startup/nekobo.service.template /etc/systemd/system/nekobo.service
+sudo cp software/tools/startup/nekobo.service /etc/systemd/system/nekobo.service
 # edit /etc/systemd/system/nekobo.service to set User, WorkingDirectory and ExecStart if necessary
 sudo systemctl daemon-reload
 sudo systemctl enable nekobo.service
