@@ -1,11 +1,29 @@
-# nekobo Project
+# `nekobo` Project
 
-**Nekobo** is an open-source robotics project that combines **hardware (FreeCAD, KiCad)** and **software (ROS2 + Python)** to create a small, cute, and hackable robot.  
-The goal is to make a platform that is **easy to build, easy to program, and fun to extend**.
+`nekobo` is an open-source, modular robot platform inspired by a cat 🐱 — small, cute, and hackable.
+It combines **hardware (FreeCAD, KiCad)** and **software (ROS2 + Python)** to create a robot that’s:
+🧩 **Modular**, 🛠 **DIY-friendly**, and 🎓 **Educational**.
 
 ---
 
-## ✨ Features (v0.1)
+## 🌱 Project Vision
+
+- Make robotics accessible and joyful for makers, students, and hobbyists
+- Use simple mechanical design
+- Keep the system modular
+- Maintain open documentation so anyone can replicate and learn
+
+---
+
+## Current Version: v0.1b
+
+Goal: Make the first replicable version of Nekobo — anyone can follow the guide and get the same result.
+
+- Use common materials (wood or acrylic)
+- Keep design fully open and DIY-friendly
+- Verify control flow: Controller → Raspberry Pi 4 → Arduino → 2 DC motors
+
+### ✨ Features
 
 - Hardware:
   - First FreeCAD model (`.fcstd`) + STL export for 3D printing
@@ -19,7 +37,11 @@ The goal is to make a platform that is **easy to build, easy to program, and fun
 
 ---
 
-## 📂 Repository Structure
+### Layout
+
+## ![v0.1 Layout](./docs/layouts/nekobo-v0.1-system-layout.drawio.svg)
+
+### 📂 Repository Structure
 
 ```
 nekobo/
@@ -36,50 +58,20 @@ nekobo/
 
 ---
 
-## 🚀 Getting Started
+### 🚀 Getting Started
 
-### 1. Clone repo
+#### 1. Clone repo
 
 ```bash
 git clone https://github.com/hiepqvbn/nekobo.git
 cd nekobo
 ```
 
-### 2. Build container
-
-```bash
-docker build -t nekobo-dev ./container
-```
-
-### 3. Run hello-world ROS2 node
-
-```bash
-docker run -it --rm nekobo-dev
-source /ros2_ws/install/setup.bash
-ros2 run nekobo_pkg hello_node
-```
-
-You should see:
-
-```bash
-[INFO] [hello_node]: Hello Nekobo!
-```
-
 ---
 
-## Layout
-
-![v0.1 Layout](./docs/layouts/nekobo-v0.1-system-layout.drawio.svg)
-
----
-
-## 🛠 Hardware
+### 🛠 Hardware
 
 - CAD: FreeCAD files
-
-- PCB: KiCad files
-
-- STL exports for 3D printing: STL folder
 
 - BOM (Bill of Materials)
 

@@ -1,0 +1,59 @@
+{
+  "protocol_version": 1,
+  "messages": {
+    "MOVE": {
+      "id": "0x01",
+      "args": [
+        "speed_left",
+        "speed_right"
+      ],
+      "direction": "to_arduino",
+      "description": "Set left and right motor speeds (signed -255..255)"
+    },
+    "STOP": {
+      "id": "0x02",
+      "args": [],
+      "direction": "to_arduino",
+      "description": "Stop all motors"
+    },
+    "SET_LED": {
+      "id": "0x03",
+      "args": [
+        "r",
+        "g",
+        "b"
+      ],
+      "direction": "to_arduino",
+      "description": "Set RGB LED color (0-255 each)"
+    },
+    "SENSOR_REPORT": {
+      "id": "0x81",
+      "args": [
+        "sensor_id",
+        "value"
+      ],
+      "direction": "from_arduino",
+      "description": "Asynchronous sensor report from firmware"
+    },
+    "HEARTBEAT_REQ": {
+      "id": "0x10",
+      "args": [],
+      "direction": "to_arduino",
+      "description": "Request firmware to reply with heartbeat (init and loop times)"
+    },
+    "HEARTBEAT_RESP": {
+      "id": "0x82",
+      "args": [
+        "init_ms",
+        "loop_ms"
+      ],
+      "direction": "from_arduino",
+      "description": "Firmware heartbeat response containing init time (ms) and last loop duration (ms)"
+    }
+  },
+  "ack": {
+    "format": "ACK <ID_HEX>",
+    "nack": "NACK <ID_HEX> <ERR_CODE>",
+    "notes": "Firmware may reply with ACK/NACK lines to confirm reception"
+  }
+}

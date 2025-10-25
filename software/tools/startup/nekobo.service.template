@@ -1,0 +1,15 @@
+[Unit]
+Description=Nekobo robot service
+After=network.target
+
+[Service]
+# Edit these to match your system:
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/nekobo/software
+ExecStart=/home/pi/nekobo/software/tools/startup/run_nekobo.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

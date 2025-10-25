@@ -1,0 +1,84 @@
+{
+  "protocol_version": 1,
+  "name": "nekobo-v0.1",
+  "generated_by": { "tool": "manual", "version": "0.1", "timestamp": "2025-10-25T00:00:00Z" },
+  "encoding": "ascii_line",
+  "framing": "newline",
+  "notes": "Authoritative protocol settings. Edit this file and run tools/sync_protocol.py to generate middleware runtime and firmware headers.",
+  "messages": {
+    "MOVE": {
+      "id": "0x01",
+      "args": [
+        { "name": "speed_left", "type": "int", "min": -255, "max": 255 },
+        { "name": "speed_right", "type": "int", "min": -255, "max": 255 }
+      ],
+      "direction": "to_arduino",
+      "description": "Set left and right motor speeds (signed -255..255)",
+      "firmware": { "macro": "MSG_MOVE", "arg_c_types": ["int16_t", "int16_t"] },
+      "examples": ["0x01 120 -120"]
+    },
+    "STOP": {
+      "id": "0x02",
+      "args": [],
+      "direction": "to_arduino",
+      "description": "Stop all motors",
+      "firmware": { "macro": "MSG_STOP", "arg_c_types": [] },
+      "examples": ["0x02"]
+    },
+    "SET_LED": {
+      "id": "0x03",
+      "args": [
+        { "name": "r", "type": "uint8", "min": 0, "max": 255 },
+        { "name": "g", "type": "uint8", "min": 0, "max": 255 },
+        { "name": "b", "type": "uint8", "min": 0, "max": 255 }
+      ],
+      "direction": "to_arduino",
+      "description": "Set RGB LED color (0-255 each)",
+      "firmware": { "macro": "MSG_SET_LED", "arg_c_types": ["uint8_t", "uint8_t", "uint8_t"] },
+      "examples": ["0x03 255 0 128"]
+    },
+    "SENSOR_REPORT": {
+      "id": "0x81",
+      "args": [
+        { "name": "sensor_id", "type": "uint8", "min": 0, "max": 255 },
+        { "name": "value", "type": "int", "min": 0 }
+      ],
+      "direction": "from_arduino",
+      "description": "Asynchronous sensor report from firmware",
+      "firmware": { "macro": "MSG_SENSOR_REPORT", "arg_c_types": ["uint8_t", "int16_t"] },
+      "examples": ["0x81 3 512"]
+    },
+    "HEARTBEAT_REQ": {
+      "id": "0x10",
+      "args": [],
+      "direction": "to_arduino",
+      "description": "Request firmware to reply with heartbeat (init and loop times)",
+      "firmware": { "macro": "MSG_HEARTBEAT_REQ", "arg_c_types": [] },
+      "examples": ["0x10"]
+    },
+    "HEARTBEAT_RESP": {
+      "id": "0x82",
+      "args": [
+        { "name": "init_ms", "type": "uint32", "description": "Milliseconds taken during setup/init" },
+        { "name": "loop_ms", "type": "uint32", "description": "Last loop duration in milliseconds" }
+      ],
+      "direction": "from_arduino",
+      "description": "Firmware heartbeat response containing init time (ms) and last loop duration (ms)",
+      "firmware": { "macro": "MSG_HEARTBEAT_RESP", "arg_c_types": ["uint32_t", "uint32_t"] },
+      "examples": ["0x82 123 5"]
+    }
+  },
+  "ack": {
+    "format": "ACK <ID_HEX>",
+    "nack": "NACK <ID_HEX> <ERR_CODE>",
+    "notes": "Firmware may reply with ACK/NACK lines to confirm reception"
+  },
+  "examples": {
+    "move": "0x01 120 -120\n",
+    "stop": "0x02\n",
+    "set_led": "0x03 255 0 128\n",
+    "sensor_report": "0x81 3 512\n",
+    "heartbeat_req": "0x10\n",
+    "heartbeat_resp": "0x82 123 5\n"
+  }
+}

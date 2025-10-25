@@ -16,6 +16,7 @@ def find_arduino():
 
 
 # Use it
+ser = None
 try:
     SERIAL_PORT = find_arduino()
     BAUD_RATE = 57600 #115200
@@ -30,11 +31,14 @@ except Exception as e:
 pygame.init()
 pygame.joystick.init()
 
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
-
-print("Controller:", joystick.get_name())
-print(f"Detected {joystick.get_numhats()} hats.")
+joystick = None
+if pygame.joystick.get_count() > 0:
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    print("Controller:", joystick.get_name())
+    print(f"Detected {joystick.get_numhats()} hats.")
+else:
+    print("No joystick detected")
 
 direction_map = {
     "forward": "dir 0 -1",
@@ -72,7 +76,11 @@ def set_direction(x, y):
 
 def send_command(cmd):
     cmd = f"{cmd}\n"
-    ser.write(cmd.encode('utf-8'))
+    if ser:
+        try:
+            ser.write(cmd.encode('utf-8'))
+        except Exception:
+            pass
     # print(f"Sent: {cmd.strip()}")
     
 
@@ -80,10 +88,12 @@ def send_command(cmd):
 try:
     while True:
         pygame.event.pump()
-        hat = joystick.get_hat(0)  # Hat0X
-
-        x = hat[0]
-        y = hat[1]
+        if joystick:
+            hat = joystick.get_hat(0)  # Hat0X
+            x = hat[0]
+            y = hat[1]
+        else:
+            x, y = 0, 0
 
         # Movement logic
         direction = set_direction(x, y)
@@ -95,5 +105,9 @@ try:
 except KeyboardInterrupt:
     print("\nExiting...")
 finally:
-    ser.close()
+    if ser:
+        try:
+            ser.close()
+        except Exception:
+            pass
     pygame.quit()
