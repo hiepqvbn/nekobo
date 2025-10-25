@@ -52,8 +52,8 @@ class HoriMiniFightstickController(BaseController):
             left = speed
             right = speed
             if x != 0:
-                left = left - 100 * x
-                right = right + 100 * x
+                left = left + 100 * x
+                right = right - 100 * x
             return {"type": "MOVE", "speed_left": int(left), "speed_right": int(right)}
         except Exception:
             return None

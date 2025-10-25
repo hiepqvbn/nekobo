@@ -27,7 +27,9 @@ def main():
         raise ValueError(f"Unknown controller type: {CHOSEN_CONTROLLER}")
 
     # Create serial comm (will attempt to auto-find port)
-    comm = SerialComm()
+    # Enable verbose serial logging when NEKOBO_DEBUG env var is set.
+    debug_flag = bool(os.environ.get('NEKOBO_DEBUG'))
+    comm = SerialComm(verbose=debug_flag)
     comm.open()
     # start controller hardware resources
     try:
