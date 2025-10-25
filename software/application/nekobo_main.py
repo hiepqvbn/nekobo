@@ -16,7 +16,7 @@ if ROOT not in sys.path:
 
 def main():
     # Create controller manager (reads joystick or nunchuk)
-    CHOSEN_CONTROLLER = "nunchuk"  # or "fightstick"
+    CHOSEN_CONTROLLER = "fightstick"  # "fightstick" | "nunchuk"
     if CHOSEN_CONTROLLER == "nunchuk":
         import middleware.controller.wii_nunchuk as controller_module
         controller = controller_module.WiiNunchukController()
