@@ -29,6 +29,9 @@ def main():
     # Create serial comm (will attempt to auto-find port)
     # Enable verbose serial logging when NEKOBO_DEBUG env var is set.
     debug_flag = bool(os.environ.get('NEKOBO_DEBUG'))
+    if debug_flag:
+        print("Debug mode enabled: verbose serial logging")
+        time.sleep(2)
     comm = SerialComm(verbose=debug_flag)
     comm.open()
     # start controller hardware resources
