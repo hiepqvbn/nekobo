@@ -72,8 +72,8 @@ class WiiNunchukController(BaseController):
             # map to speeds
             forward = int(max(-1.0, min(1.0, -cy)) * 200)
             turn = int(max(-1.0, min(1.0, cx)) * 100)
-            left = forward - turn
-            right = forward + turn
+            left = forward + turn
+            right = forward - turn
             return {"type": "MOVE", "speed_left": int(left), "speed_right": int(right)}
         except OSError:
             # transient I2C issue; caller may retry later

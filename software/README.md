@@ -51,9 +51,12 @@ pip install -r requirements.txt
 deactivate
 ```
 
-3) Copy the systemd template and edit paths if needed (the template is now in `software/tools/startup/`):
+3) Copy the systemd template and edit paths as `nekobo.service` (the template is now in `software/tools/startup/`):
 
 ```bash
+# Give execute permission to script
+chmod +x ~/nekobo/software/tools/startup/run_nekobo.sh
+
 sudo cp software/tools/startup/nekobo.service /etc/systemd/system/nekobo.service
 # edit /etc/systemd/system/nekobo.service to set User, WorkingDirectory and ExecStart if necessary
 sudo systemctl daemon-reload
