@@ -38,7 +38,31 @@ def main():
         pass
 
     bridge = Bridge(controller=controller, comm=comm)
-    bridge.request_heartbeat()
+
+    # In debug mode, spawn a background thread that issues heartbeat
+    # requests repeatedly for a configured duration (useful for headless RP4).
+    if debug_flag:
+        import threading
+
+        hb_secs = int(os.environ.get('NEKOBO_DEBUG_HEARTBEAT_SECONDS', '10'))
+        hb_interval = float(os.environ.get('NEKOBO_DEBUG_HEARTBEAT_INTERVAL', '1.0'))
+
+        def _hb_runner():
+            end = time.time() + hb_secs
+            while time.time() < end:
+                try:
+                    bridge._log('debug-heartbeat: requesting')
+                    res = bridge.request_heartbeat(timeout=hb_interval)
+                    if res:
+                        bridge._log('debug-heartbeat: got', res)
+                    else:
+                        bridge._log('debug-heartbeat: no response')
+                except Exception as e:
+                    bridge._log('debug-heartbeat: exception', e)
+                time.sleep(hb_interval)
+
+        t = threading.Thread(target=_hb_runner, daemon=True)
+        t.start()
 
     try:
         while True:

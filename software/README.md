@@ -66,6 +66,32 @@ sudo journalctl -u nekobo.service -f
 - Logs: `sudo journalctl -u nekobo.service -f`
 - Run manually: `/home/pi/nekobo/software/tools/startup/run_nekobo.sh`
 
+Debug mode
+----------
+
+For headless debugging you can enable extra runtime logging and an automatic
+heartbeat probe. Set the following environment variables before running the
+application or configure them in the systemd service unit.
+
+- `NEKOBO_DEBUG=1` — enable verbose serial and bridge logging (prints to stdout/journal).
+- `NEKOBO_DEBUG_HEARTBEAT_SECONDS` — how many seconds to run heartbeat probes at
+	startup (default: `10`). While running the probes the bridge will issue
+	`HEARTBEAT_REQ` messages and log any `HEARTBEAT_RESP` replies.
+- `NEKOBO_DEBUG_HEARTBEAT_INTERVAL` — interval in seconds between heartbeat probes
+	(default: `1.0`).
+
+Example (manual run):
+
+```bash
+export NEKOBO_DEBUG=1
+export NEKOBO_DEBUG_HEARTBEAT_SECONDS=20
+cd /home/pi/nekobo/software
+python3 -m application.nekobo_main
+```
+
+If you run Nekobo as a systemd service, add these to the service unit (or a
+wrapper script) so the journal captures debug output.
+
 ## Generating protocol artifacts (sync)
 
 When you change the canonical protocol settings, run the sync tool to generate
