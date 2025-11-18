@@ -66,6 +66,70 @@ socat -,raw,echo=0,escape=0x03 /dev/ttyACM0,raw,echo=0,crnl,baud=57600
 Safety
 - Be careful when commanding motors directly; test with wheels off the ground until behavior is validated.
 
+Ultrasonic sensors and safety interlock
+-------------------------------------
+
+This firmware supports two HC-SR04 ultrasonic sensors (front and rear). By
+default it's wired to the pins defined in the sketch:
+
+- Front: trigger=7, echo=8
+- Rear: trigger=4, echo=2
+
+Before executing a MOVE command received over serial, the MCU checks the
+appropriate ultrasonic sensor (front for forward motion, rear for reverse).
+If an obstacle is detected inside the configured safety distance (default
+20 cm), the firmware rejects the MOVE with a `NACK` and keeps the motors off.
+
+You can adjust the pins or `SAFETY_DISTANCE_CM` in the sketch if your
+hardware differs.
+
+Watchdog / safety timeout
+-------------------------
+
+The firmware includes a command watchdog that ensures motors are stopped if
+valid commands stop arriving from the RP4 for a short period. By default the
+watchdog timeout is 1500 ms (see `COMMAND_WATCHDOG_MS` in the sketch). When
+the watchdog trips the MCU will stop the motors and emit a `WATCHDOG:` log
+over serial. This is a software safeguard to prevent runaway motion if the
+host becomes unresponsive or the serial link disconnects.
+
+If you prefer a hardware reset instead, the sketch includes an optional AVR
+hardware watchdog support (requires compiling with `USE_HW_WATCHDOG` and an
+AVR-based board). Hardware watchdog is disabled by default.
+
+Enabling AVR hardware watchdog
+------------------------------
+
+To enable the AVR hardware watchdog (recommended for additional safety on an
+Arduino UNO), compile the sketch with the preprocessor define `USE_HW_WATCHDOG`.
+How to enable depends on your toolchain:
+
+- Arduino IDE: add `#define USE_HW_WATCHDOG` at the top of the sketch (not
+  recommended for long-term maintenance) or use build flags in the board
+  configuration.
+- arduino-cli: add `-D USE_HW_WATCHDOG` to the compile flags. Example:
+
+```bash
+arduino-cli compile --fqbn arduino:avr:uno -b -e -D USE_HW_WATCHDOG /path/to/nekobo_v0_1_fw
+```
+
+- PlatformIO: add the define to `build_flags` in `platformio.ini`:
+
+```ini
+[env:uno]
+platform = atmelavr
+board = uno
+framework = arduino
+build_flags = -D USE_HW_WATCHDOG
+```
+
+When enabled the firmware will call `wdt_enable(WDTO_2S)` at startup (2s
+timeout) and reset the watchdog periodically while the system is healthy.
+If the MCU stops kicking the watchdog (for example due to a lockup or
+communication failure), the hardware watchdog will reset the MCU. After a
+hardware reset the firmware boots cleanly and motors remain stopped until
+explicit commands are received.
+
 Troubleshooting
 - If serial prints look garbled, confirm baud rate is 57600.
 - If `protocol.h` is out of sync after editing `protocol_setting.json`, run `python3 software/tools/sync_protocol.py` and recompile firmware.
